@@ -34,7 +34,7 @@ def createToken():
 
 
 """
-Retrieve new c. MarketplaceEvents includes links to orders and licences."""
+Retrieve new MarketplaceEvents which includes links to orders and licences."""
 def getMarketplaceEvents(offset=0, limit=50):
     try:
         endpoint = f'https://{_API_STAGE}/lead/{_API_VERSION}/marketplaceEvents'
@@ -66,3 +66,46 @@ if status != 200:
     exit()
 
 print(marketplaceEvents)
+# marketplaceEvents should be Empty or below object. If it's Empty you have nothing to do.
+# If not empty, you have to use value of orderId to fetch Order in next API.
+"""
+{
+  "hasMore": false,
+  "marketplaceEvents": [
+    {
+      "additionalProperties": [
+        {
+          "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
+          "name": "orderId",
+          "value": "3e6e133b-a2ab-4e36-8b0f-38a24c085ce6"
+        }
+      ],
+      "description": "Provisioning has been started",
+      "detailedDescription": "Provisioning has been started",
+      "eventId": "3c17a28c-819f-45c9-af01-dfec33cd4a45",
+      "eventTime": "2023-03-28T11:49:57.557066+00:00",
+      "eventTypeCode": "ServicePurchased",
+      "seenTime": null,
+      "sellerId": "5",
+      "statusCode": "ProvisioningStarted"
+    },
+    {
+      "additionalProperties": [
+        {
+          "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
+          "name": "orderId",
+          "value": "0b31fe86-b5f6-4b4d-818e-c4896b4c20e8"
+        }
+      ],
+      "description": "Provisioning has been started",
+      "detailedDescription": "Provisioning has been started",
+      "eventId": "6c2e4a76-6163-4cdc-a798-d591e8fd0b21",
+      "eventTime": "2023-03-28T11:49:59.314374+00:00",
+      "eventTypeCode": "ServicePurchased",
+      "seenTime": null,
+      "sellerId": "5",
+      "statusCode": "ProvisioningStarted"
+    }
+  ]
+}
+"""

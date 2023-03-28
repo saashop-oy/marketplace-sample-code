@@ -9,6 +9,7 @@ _API_VERSION = os.getenv('API_VERSION', "")
 _CLIENT_ID = os.getenv('CLIENT_ID', "")
 _CLIENT_SECRET = os.getenv('CLIENT_SECRET', "")
 _INTERNAL_ERROR_CODE = 500
+_TOKEN=""
 
 def base64wrapper(message):
     message_bytes = message.encode('ascii')
@@ -31,9 +32,37 @@ def createToken():
         print(f'{e}')
         return e, _INTERNAL_ERROR_CODE
 
+
+"""
+Retrieve new c. MarketplaceEvents includes links to orders and licences."""
+def getMarketplaceEvents(offset=0, limit=50):
+    try:
+        endpoint = f'https://{_API_STAGE}/lead/{_API_VERSION}/marketplaceEvents'
+        params = {
+            "offset": offset,
+            "limit": limit
+        }
+        headers = {
+            "X-Request-ID": str(uuid.uuid4()),
+            "Authorization": _TOKEN
+        }
+        response = requests.get(endpoint, params=params, headers=headers)
+        return response.json(), response.status_code
+    except Exception as e:
+        print(f'{e}')
+        return e, _INTERNAL_ERROR_CODE
+
+
 # Code
 token, status = createToken()
 if status != 201:
     print(f'ERROR: API call failed. {status}, {token}')
     exit()
-print(token)
+
+_TOKEN = token.get("tokenType", "") + " " + token.get("accessToken", "")
+marketplaceEvents, status = getMarketplaceEvents(offset=0, limit=50)
+if status != 200:
+    print(f'ERROR: API call failed. {status}, {marketplaceEvents}')
+    exit()
+
+print(marketplaceEvents)

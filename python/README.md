@@ -5,7 +5,7 @@
 
 ## Environment Variables
 ```sh
-cp env.template.rc env.rc
+cp ../env.template.rc env.rc
 ```
 edit env.rc and add your ClientId and ClientSecret.
 

@@ -34,7 +34,7 @@ def createToken():
 
 
 """
-Retrieve new MarketplaceEvents which includes links to orders and licences."""
+Retrieve new MarketplaceEvents which includes links to orders and licenses."""
 def getMarketplaceEvents(offset=0, limit=50):
     try:
         endpoint = f'https://{_API_STAGE}/lead/{_API_VERSION}/marketplaceEvents'
@@ -95,6 +95,11 @@ print(marketplaceEvents)
           "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
           "name": "orderId",
           "value": "0b31fe86-b5f6-4b4d-818e-c4896b4c20e8"
+        },
+        {
+            "description": "Unique identifier of the license. This identifer can be used to fetch the licenseId.",
+            "name": "licenseId",
+            "value": "a4f270a7-69f3-4c8f-a7e5-f75583501b21"
         }
       ],
       "description": "Provisioning has been started",

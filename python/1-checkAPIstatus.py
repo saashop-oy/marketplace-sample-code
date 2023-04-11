@@ -7,8 +7,7 @@ _API_VERSION = os.getenv('API_VERSION', "")
 _INTERNAL_ERROR_CODE = 500
 
 """
-This ping endpoint can be used to check the status of the API without any authentication headers.
-"""
+This ping endpoint can be used to check the status of the API without any authentication headers."""
 def checkAPIStatus():
     try:
         endpoint = f'https://{_API_STAGE}/base/{_API_VERSION}/ping'
@@ -22,5 +21,5 @@ def checkAPIStatus():
 ping, status = checkAPIStatus()
 if status != 200:
     print('ERROR: API call failed.')
-else:
-    print(ping)
+    exit()
+print(ping)

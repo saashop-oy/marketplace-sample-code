@@ -19,6 +19,7 @@ def base64wrapper(message):
 """
 This endpoint can be used to authenticate and crate token."""
 def createToken():
+    print('Basic ' + base64wrapper(f'{_CLIENT_ID}:{_CLIENT_SECRET}'))
     try:
         endpoint = f'https://{_API_STAGE}/auth/{_API_VERSION}/tokens'
         headers = {

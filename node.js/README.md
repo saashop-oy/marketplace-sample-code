@@ -1,6 +1,6 @@
 
 
-# Prepare php Sample Code
+# Prepare nodejs Sample Code
 
 
 ## Environment Variables
@@ -15,5 +15,5 @@ source env.rc
 
 ## Run sample code
 ```sh
-php <file.py>
+node <file.py>
 ```

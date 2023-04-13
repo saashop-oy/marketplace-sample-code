@@ -130,6 +130,45 @@ def dispatch(token, marketplaceEvent):
         elif (additionalProperty.get("name", "") == "licenseId"):
             return getLicense(token, additionalProperty.get("value", ""))
 
+
+
+
+
+"""
+    pass body to this method and post marketplaceEvent.
+    - Id of order you want to add marketplaceEvent.
+    - eventTypeCode, required, string
+        - Enum: "ServicePurchased" "Evaluation" "Trial" "UpgradeToTrial" "UpgradeToPurchase" 
+        - Currently supported types: ServicePurchased
+    - statusCode, required, string
+        - Enum: "ProvisioningStarted" "ProvisioningInProgress" "ProvisioningCompleted" "ProvisioningFailed"
+    body = marketplaceEvent = {
+        "additionalProperties": [
+            {
+                "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
+                "name": "orderId",
+                "value": orderId
+            }
+        ],
+        "description": Description,
+        "eventTypeCode": eventTypeCode,
+        "statusCode": statusCode
+    }    
+"""
+def postMarketplaceEvents(token, body):
+    try:
+        endpoint = f'https://{_API_STAGE}/lead/{_API_VERSION}/marketplaceEvents'        
+        headers = {
+            "Content-Type": "application/json",
+            "X-Request-ID": str(uuid.uuid4()),
+            "Authorization": token
+        }
+        response = requests.post(endpoint, headers=headers, data=body)
+        return response.status_code
+    except Exception as e:
+        print(f'{e}')
+        return _INTERNAL_ERROR_CODE
+
 # checkAPIStatus
 ping, status = checkAPIStatus()
 if status != 200:
@@ -154,3 +193,25 @@ if status != 200:
 #print(marketplaceEvents)
 for marketplaceEvent in marketplaceEvents:
     dispatch(token, marketplaceEvent)
+
+
+# postMarketplaceEvents
+orderId = '3e6e133b-a2ab-4e36-8b0f-38a24c085ce6'   #Id of order you want to add marketplaceEvent.
+marketplaceEvent = {
+    "additionalProperties": [
+        {
+        "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
+        "name": "orderId",
+        "value": orderId
+        }
+    ],
+    "description": 'Provisioning has been started',
+    "eventTypeCode": 'ServicePurchased',
+    "statusCode": 'ProvisioningInProgress'
+}
+status = postMarketplaceEvents(token, json.dumps(marketplaceEvent))
+if status != 201:
+    print(f'ERROR: API call failed. {status}')
+    exit()
+
+print ('marketplaceEvent posted!')

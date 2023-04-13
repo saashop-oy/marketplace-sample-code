@@ -143,7 +143,7 @@ var getLicense = function (token, licenseId) {
     - marketplaceEvent
     return value is an License object or an Order object.
 */
-var dispatch = function (marketplaceEvent) {
+var dispatch = function (token, marketplaceEvent) {
     return new Promise((resolve, reject) => {
         additionalProperties = marketplaceEvent["additionalProperties"]
         additionalProperties.forEach(additionalProperty => {
@@ -171,6 +171,50 @@ var dispatch = function (marketplaceEvent) {
         });
     });
 }
+
+
+/*
+    pass body to this method and post marketplaceEvent.
+    - Id of order you want to add marketplaceEvent.
+    - eventTypeCode, required, string
+        - Enum: "ServicePurchased" "Evaluation" "Trial" "UpgradeToTrial" "UpgradeToPurchase" 
+        - Currently supported types: ServicePurchased
+    - statusCode, required, string
+        - Enum: "ProvisioningStarted" "ProvisioningInProgress" "ProvisioningCompleted" "ProvisioningFailed"
+    body = marketplaceEvent = {
+        "additionalProperties": [
+            {
+                "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
+                "name": "orderId",
+                "value": orderId
+            }
+        ],
+        "description": Description,
+        "eventTypeCode": eventTypeCode,
+        "statusCode": statusCode
+    }    
+*/
+var postMarketplaceEvents = function (token, body) {
+    return new Promise((resolve, reject) => {
+        const url = `https://${_API_STAGE}/lead/${_API_VERSION}/marketplaceEvents`;
+        config = {
+            headers: {
+                "Content-Type": "application/json",
+                "X-Request-ID": uuid.v4(),
+                "Authorization": token
+            }
+        };
+        axios
+            .post(url, body, config)
+            .then(response => {
+                resolve(response);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
 
 /*
     pass ClientId and ClientSecret to this method and get time-limited JWT Bearer token.
@@ -201,18 +245,18 @@ var authenticate = function () {
 /*
     Call checkAPIstatus to see the simple ping response form API server.
 */
-/*checkAPIstatus()
+checkAPIstatus()
     .then((ping) => {
         console.log(ping);
     })
     .catch(error => {
         console.log(error);
     });
-*/
 
 
 
 /*
+    Get Order / License
     1. First call authenticate function to have a JWT tokne.
     2. Get new marketplaceEvents by call getMarketplaceEventsRecursive
     3. For each marketplaceEvent, call Dispatch function.
@@ -222,7 +266,7 @@ authenticate(_API_STAGE, _API_VERSION, _CLIENT_ID, _CLIENT_SECRET)
         getMarketplaceEventsRecursive(token, `https://${_API_STAGE}/lead/${_API_VERSION}/marketplaceEvents`, 40, marketplaceEvents=[])
             .then((marketplaceEvents) => {
                 marketplaceEvents.forEach(marketplaceEvent => {
-                    dispatch(marketplaceEvent)
+                    dispatch(token, marketplaceEvent)
                         .then(response => {
                             console.log(response);
                         })
@@ -234,6 +278,39 @@ authenticate(_API_STAGE, _API_VERSION, _CLIENT_ID, _CLIENT_SECRET)
             .catch((error) => {
                 console.log(error);
             });
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+
+/*
+    Post marketplaceEvent
+    1. First call authenticate function to have a JWT tokne.
+    2. Prepare new marketplaceEvents and call postMarketplaceEvents
+*/
+authenticate(_API_STAGE, _API_VERSION, _CLIENT_ID, _CLIENT_SECRET)
+    .then((token) => {
+        orderId = '3e6e133b-a2ab-4e36-8b0f-38a24c085ce6'; // the Order we want to add marketplaceEvent
+        body = marketplaceEvent = {
+            "additionalProperties": [
+                {
+                    "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
+                    "name": "orderId",
+                    "value": orderId
+                }
+            ],
+            "description": 'Provisioning has been started',
+            "eventTypeCode": 'ServicePurchased',
+            "statusCode": 'ProvisioningInProgress'
+        }
+        postMarketplaceEvents(token, body)
+            .then((response) => {
+                console.log(response.status);
+            })
+            .catch((error) => {
+                console.log(error);
+            });        
     })
     .catch(error => {
         console.log(error);

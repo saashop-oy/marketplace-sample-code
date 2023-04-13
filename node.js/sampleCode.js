@@ -292,7 +292,7 @@ authenticate(_API_STAGE, _API_VERSION, _CLIENT_ID, _CLIENT_SECRET)
 authenticate(_API_STAGE, _API_VERSION, _CLIENT_ID, _CLIENT_SECRET)
     .then((token) => {
         orderId = '3e6e133b-a2ab-4e36-8b0f-38a24c085ce6'; // the Order we want to add marketplaceEvent
-        body = marketplaceEvent = {
+        marketplaceEvent = {
             "additionalProperties": [
                 {
                     "description": "Unique identifier of the order. This identifer can be used to fetch the order.",
@@ -304,7 +304,7 @@ authenticate(_API_STAGE, _API_VERSION, _CLIENT_ID, _CLIENT_SECRET)
             "eventTypeCode": 'ServicePurchased',
             "statusCode": 'ProvisioningInProgress'
         }
-        postMarketplaceEvents(token, body)
+        postMarketplaceEvents(token, marketplaceEvent)
             .then((response) => {
                 console.log(response.status);
             })

@@ -5,9 +5,9 @@
 - export CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
 - export CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-> Use your own CLIENT_ID, and CLIENT_SECRET
+> Use your own CLIENT_ID, and CLIENT_SECRET value
 
 ## Run sample code
 ```sh
-node <file.js>
+node index.js
 ```

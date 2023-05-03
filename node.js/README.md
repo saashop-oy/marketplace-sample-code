@@ -1,19 +1,13 @@
 
-
-# Prepare nodejs Sample Code
-
-
 ## Environment Variables
-```sh
-cp ../env.template.rc env.rc
-```
-> edit env.rc and add your ClientId and ClientSecret.
+- export API_STAGE="dev-api.saashop.com"
+- export API_VERSION="v1"
+- export CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+- export CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-```sh
-source env.rc
-```
+> Use your own CLIENT_ID, and CLIENT_SECRET
 
 ## Run sample code
 ```sh
-node <file.py>
+node <file.js>
 ```

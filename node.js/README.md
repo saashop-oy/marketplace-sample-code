@@ -9,5 +9,5 @@
 
 ## Run sample code
 ```sh
-node <file.js>
+node index.js
 ```

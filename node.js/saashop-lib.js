@@ -17,7 +17,11 @@ const baseURL = `https://${API_STAGE}`;
 /* 
     Check the status of the API without any authentication headers. 
 */
-const ping = () => axios.get(`${baseURL}/base/${API_VERSION}/ping`);
+const ping = async () => {
+    const url = `${baseURL}/base/${API_VERSION}/ping`;
+    console.log(`Invoke API: GET ${url}`);
+    return axios.get(url);
+}
 
 /*
     pass ClientId and ClientSecret to this method and get time-limited JWT Bearer token.
@@ -34,9 +38,9 @@ const getToken = async (clientID=CLIENT_ID, clientSecret=CLIENT_SECRET) => {
             'Authorization': 'Basic ' + b64
         }
     };
+    console.log(`Invoke API: POST ${url}`);
     const response = await axios.post(url, null, config);
     const token = `${response.data.tokenType} ${response.data.accessToken}`
-
     return token;
 }
 
@@ -48,8 +52,6 @@ const getToken = async (clientID=CLIENT_ID, clientSecret=CLIENT_SECRET) => {
 */
 const getMarketplaceEventsChunk = (token, limit=50) => {
     const url = `${baseURL}/lead/${API_VERSION}/marketplaceEvents`;
-    console.log(`Invoke API: ${url}?limit=${limit}`);
-
     const config = {
         params: {
             "limit": limit
@@ -59,6 +61,7 @@ const getMarketplaceEventsChunk = (token, limit=50) => {
             "Authorization": token
         }
     };
+    console.log(`Invoke API: GET ${url}?limit=${limit}`);
     return axios.get(url, config);
 }
 
@@ -88,14 +91,13 @@ const getMarketplaceEvents = async (token, limit=50, marketplaceEvents=[]) => {
 */
 var getOrder = function (token, orderId) {
     const url = `${baseURL}/lead/${API_VERSION}/orders/${orderId}`;
-    console.log(`Invoke API: ${url}`);
-
     const config = {
         headers: {
             "X-Request-ID": uuid.v4(),
             "Authorization": token
         }
     };
+    console.log(`Invoke API: GET ${url}`);
     return axios.get(url, config)
 }
 
@@ -106,15 +108,14 @@ var getOrder = function (token, orderId) {
     return value is an License object.
 */
 var getLicense = function (token, licenseId) {
-    const url = `${baseURL}/lead/${API_VERSION}/licenses/${licenseId}`;
-    console.log(`Invoke API: ${url}`);
-
+    const url = `${baseURL}/lead/${API_VERSION}/licenses/${licenseId}`;  
     const config = {
         headers: {
             "X-Request-ID": uuid.v4(),
             "Authorization": token
         }
     };
+    console.log(`Invoke API: GET ${url}`);
     return axios.get(url, config);
 }
 
@@ -148,6 +149,7 @@ const postMarketplaceEvents = (token, body) => {
             "Authorization": token
         }
     };
+    console.log(`Invoke API: POST ${url}`);
     return axios.post(url, body, config);
 }
 

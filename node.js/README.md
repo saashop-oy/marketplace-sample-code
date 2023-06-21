@@ -9,5 +9,6 @@
 
 ## Run sample code
 ```sh
+npm install
 node index.js
 ```
